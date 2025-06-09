@@ -17,7 +17,7 @@ project/
 ├── optimize_refined.py
 ├── optimize_final.py
 ├── evaluate_best_configs.py
-├── optuna_final_results.csv
+├── evaluate_with_metrics.py
 └── README.md
 ```
 
@@ -73,4 +73,4 @@ El entorno también usa el coeficiente de Hurst, el exponente de Lyapunov y vola
 
 ## 📬 Contacto
 
-Proyecto creado y entrenado por [Tu Nombre o Usuario].
+Proyecto creado y entrenado por [Blas Martin Castro].
