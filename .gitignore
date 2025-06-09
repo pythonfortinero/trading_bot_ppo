@@ -1,0 +1,13 @@
+# Poetry virtualenv
+.env/
+.venv/
+# Old virtualenv
+venv/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.DS_Store

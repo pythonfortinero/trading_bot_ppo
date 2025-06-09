@@ -1,0 +1,74 @@
+[project]
+name = "trading-bot-ppo"
+version = "0.1.0"
+description = "trading bot using SB3 PPO"
+authors = [
+    {name = "Blas Martin Castro",email = "castro.blas.martin@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "absl-py (==2.3.0)",
+    "ale-py (==0.11.1)",
+    "alembic (==1.16.1)",
+    "bottle (==0.13.3)",
+    "cloudpickle (==3.1.1)",
+    "colorlog (==6.9.0)",
+    "contourpy (==1.3.2)",
+    "cycler (==0.12.1)",
+    "farama-notifications (==0.0.4)",
+    "filelock (==3.18.0)",
+    "fonttools (==4.58.1)",
+    "fsspec (==2025.5.1)",
+    "future (==1.0.0)",
+    "grpcio (==1.72.1)",
+    "gymnasium (==1.1.1)",
+    "hurst (==0.0.5)",
+    "jinja2 (==3.1.6)",
+    "joblib (==1.5.1)",
+    "kiwisolver (==1.4.8)",
+    "mako (==1.3.10)",
+    "markdown (==3.8)",
+    "markdown-it-py (==3.0.0)",
+    "markupsafe (==3.0.2)",
+    "matplotlib (==3.10.3)",
+    "mdurl (==0.1.2)",
+    "mpmath (==1.3.0)",
+    "networkx (==3.5)",
+    "nolds (==0.6.1)",
+    "numpy (==2.2.6)",
+    "opencv-python (==4.11.0.86)",
+    "optuna (==4.3.0)",
+    "optuna-dashboard (==0.18.0)",
+    "packaging (==25.0)",
+    "pandas (==2.2.3)",
+    "pillow (==11.2.1)",
+    "protobuf (==6.31.1)",
+    "psutil (==7.0.0)",
+    "pygame (==2.6.1)",
+    "pygments (==2.19.1)",
+    "pyparsing (==3.2.3)",
+    "python-dateutil (==2.9.0.post0)",
+    "pytz (==2025.2)",
+    "pyyaml (==6.0.2)",
+    "rich (==14.0.0)",
+    "scikit-learn (==1.7.0)",
+    "scipy (==1.15.3)",
+    "six (==1.17.0)",
+    "sqlalchemy (==2.0.41)",
+    "stable-baselines3 (==2.6.0)",
+    "sympy (==1.14.0)",
+    "tensorboard (==2.19.0)",
+    "tensorboard-data-server (==0.7.2)",
+    "threadpoolctl (==3.6.0)",
+    "torch (==2.7.0)",
+    "tqdm (==4.67.1)",
+    "typing-extensions (==4.14.0)",
+    "tzdata (==2025.2)",
+    "werkzeug (==3.1.3)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
