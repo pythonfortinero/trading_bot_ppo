@@ -17,6 +17,12 @@ class SimplifiedTradingEnv(gym.Env):
             "reward_profit": 1.0,
             "reward_loss": -2.0,
             "reward_idle": -0.1,
+            "reward_inventory": 2,
+            "reward_reduce_trade": 2,
+            "reward_hold_hurst_positive": 1,
+            "reward_hold_hurst_negative": 1,
+            "reward_hold_lyap_positive": 1,
+            "reward_hold_lyap_negative": 1,
         }
         self.df = pd.read_csv(csv_path)
         self.max_steps = max_steps
@@ -29,7 +35,8 @@ class SimplifiedTradingEnv(gym.Env):
         self.cash = 1000.0
         self.inventory = 0
         self.inventory_value = 0.0
-        self.last_equity = 1000.0
+        self.fee_rate = self.reward_config.get("fee_rate", 0.001)
+        self.last_equity = self.cash
         self.total_reward = 0
         self.trades = []
 
@@ -46,6 +53,7 @@ class SimplifiedTradingEnv(gym.Env):
         self.inventory_history = []
         self.reward_history = []
         self.prev_inventory = 0
+        self.equity_history = []
         return self._get_observation(), {}
 
     def _get_observation(self):
@@ -90,10 +98,11 @@ class SimplifiedTradingEnv(gym.Env):
         # Compra si hay cash
         if action == 1 and self.cash >= ask:
             self.inventory += 1
-            self.cash -= ask
+            fee = ask * self.fee_rate
+            self.cash -= fee
             self.inventory_value += ask
             reward += self.reward_config["reward_trade"]  # premio por comprar
-            reward -= 0.06 * self.inventory
+            reward -= 0.06 * (self.inventory ** self.reward_config["reward_inventory"])
             self.trades.append((self.current_step, "BUY", ask))
 
         elif action == 2 and self.inventory > 0:
@@ -108,33 +117,36 @@ class SimplifiedTradingEnv(gym.Env):
                     reward += 1.0  # bonus específico
                 self.trades.append((self.current_step, "SELL", bid, base_gain))
                 self.cash += bid * self.inventory
+                fee = bid * self.inventory * self.fee_rate
+                self.cash -= fee
                 self.inventory = 0
             else:
                 reward += self.reward_config["reward_loss"] * abs(diff)
 
             if (self.cash + self.inventory * bid) > 1000:
-                reward += 100
+                reward += 2.5
 
         elif action == 0:
             reward += self.reward_config["reward_idle"]
             if hurst > 0.55:
-                reward += self.reward_config["reward_hold"]
-            if lyap < 0.2:
-                reward += self.reward_config["reward_hold"]
+                reward += self.reward_config["reward_hold_hurst_positive"]
             if hurst < 0.45:
-                reward += self.reward_config["reward_hold"]
+                reward += self.reward_config["reward_hold_hurst_negative"]
+            if lyap < 0.2:
+                reward += self.reward_config["reward_hold_lyap_negative"]
             if lyap > 0.5:
-                reward += self.reward_config["reward_hold"]
+                reward += self.reward_config["reward_hold_lyap_positive"]
 
         # Premio por reducir inventario
         if self.inventory < self.prev_inventory:
-            reward += self.reward_config["reward_trade"] * 0.1 * (self.prev_inventory - self.inventory)
+            reward += self.reward_config["reward_reduce_trade"] * 0.1 * (self.prev_inventory - self.inventory)
         self.prev_inventory = self.inventory
 
         # Recompensa por equity
         equity = self.cash + self.inventory * bid
         reward += (equity - self.last_equity) * 0.1
         self.last_equity = equity
+        self.equity_history.append(equity)
 
         # Volatilidad local para escalar
         window = self.df['bid'].iloc[max(0, self.current_step - 10):self.current_step]
@@ -145,11 +157,14 @@ class SimplifiedTradingEnv(gym.Env):
         # Exploración
         reward += np.random.normal(0, 0.01)
 
+
+        if self.inventory >= 10:
+            done = True  # o bloquear compras
         # Finalizar episodio
         self.current_step += 1
         if self.current_step - self.start_step >= self.max_steps:
-            if (self.cash + self.inventory * bid) > 1000 and len(self.trades) > 0:
-                reward += 1000
+            if (self.cash + self.inventory * bid) > 1000:
+                reward += 5
             done = True
 
         return self._get_observation(), reward, done, False, {}
