@@ -6,7 +6,7 @@ from env_simple import SimplifiedTradingEnv
 
 
 # === CONFIGURACIÓN ===
-CSV_PATH = "data/BITSO-XRP_MXN-1000_depth-1748377579235.csv"
+CSV_PATH = "data/BINANCE-USDT_BRL-100_depth-1749231790356.csv"
 BEST_CONFIG = {
     "reward_trade": 0.2208774021033368,
     "reward_hold": -1.157301024543008,

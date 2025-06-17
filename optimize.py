@@ -2,7 +2,7 @@ import optuna
 from stable_baselines3 import PPO
 from env_simple import SimplifiedTradingEnv
 
-CSV_PATH = "data/BITSO-XRP_MXN-1000_depth-1748377579235.csv"
+CSV_PATH = "data/BINANCE-USDT_BRL-100_depth-1749231790356.csv"
 
 def objective(trial):
     reward_config = {
@@ -37,8 +37,8 @@ def objective(trial):
         return -1.0  # Penalización fuerte para que Optuna descarte este trial
 
     # 💾 Guardar buen modelo
-    model.save(f"model_equity_{int(final_equity)}.zip")
-    with open(f"model_equity_{int(final_equity)}.json", "w") as f:
+    model.save(f"models/model_equity_{int(final_equity)}.zip")
+    with open(f"models/model_equity_{int(final_equity)}.json", "w") as f:
         import json
         json.dump(reward_config, f, indent=2)
 

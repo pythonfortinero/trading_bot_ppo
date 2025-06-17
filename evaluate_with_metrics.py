@@ -1,10 +1,10 @@
 from stable_baselines3 import PPO
 from env_simple import SimplifiedTradingEnv
 
-csv_path = "data/BITSO-XRP_MXN-1000_depth-1748377579235.csv"
-#csv_path = "data/BITSO-USD_BRL-1000_depth-1748377578952.csv"
+#csv_path = "data/BITSO-XRP_MXN-1000_depth-1748377579235.csv"
+csv_path = "data/BITSO-USD_BRL-1000_depth-1748377578952.csv"
 
-model_path = "ppo_trading_simplificado"
+model_path = "model_equity_2125"
 
 env = SimplifiedTradingEnv(csv_path, max_steps=500)
 model = PPO.load(model_path)
